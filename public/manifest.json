@@ -1,0 +1,24 @@
+{
+  "name": "Madi & Jake Wedding",
+  "short_name": "Madi & Jake",
+  "description": "Share photos and updates from Madi & Jake's wedding at The Homestead",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a3a2f",
+  "theme_color": "#2d5a4a",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/images/hero-bg.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/images/hero-bg.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "categories": ["social", "photo"]
+}
