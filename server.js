@@ -7,8 +7,124 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Password protection
+const WEDDING_PASSWORD = process.env.WEDDING_PASSWORD || 'MadiJake2026';
+
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization || req.query.password || req.cookies?.wedding_auth;
+  
+  // Check basic auth header
+  if (auth && auth.startsWith('Basic ')) {
+    const base64 = auth.split(' ')[1];
+    const decoded = Buffer.from(base64, 'base64').toString('utf8');
+    const [user, pass] = decoded.split(':');
+    if (pass === WEDDING_PASSWORD) {
+      return next();
+    }
+  }
+  
+  // Check query param or cookie
+  if (auth === WEDDING_PASSWORD) {
+    return next();
+  }
+  
+  // Return 401 with HTML login form
+  res.status(401).send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Madi & Jake Wedding - Login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body {
+          font-family: 'Georgia', serif;
+          background: linear-gradient(135deg, #1a3a2f 0%, #2d5a4a 100%);
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+        }
+        .login-box {
+          background: white;
+          padding: 40px;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+          text-align: center;
+          max-width: 400px;
+          width: 90%;
+        }
+        h1 {
+          color: #2d5a4a;
+          margin-bottom: 10px;
+        }
+        p {
+          color: #666;
+          margin-bottom: 30px;
+        }
+        input[type="password"] {
+          width: 100%;
+          padding: 15px;
+          border: 2px solid #ddd;
+          border-radius: 10px;
+          font-size: 1rem;
+          margin-bottom: 20px;
+          box-sizing: border-box;
+        }
+        button {
+          background: #2d5a4a;
+          color: white;
+          border: none;
+          padding: 15px 40px;
+          border-radius: 25px;
+          font-size: 1rem;
+          cursor: pointer;
+          width: 100%;
+        }
+        button:hover {
+          background: #1a3a2f;
+        }
+        .error {
+          color: #d32f2f;
+          margin-top: 15px;
+          display: none;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="login-box">
+        <h1>💕 Madi & Jake 💕</h1>
+        <p>Welcome to our wedding website!<br>Please enter the password to continue.</p>
+        <form onsubmit="return login(event)">
+          <input type="password" id="password" placeholder="Enter password" required>
+          <button type="submit">Enter</button>
+        </form>
+        <p class="error" id="error">Incorrect password. Please try again.</p>
+      </div>
+      <script>
+        function login(e) {
+          e.preventDefault();
+          const password = document.getElementById('password').value;
+          fetch('/?password=' + encodeURIComponent(password))
+            .then(r => {
+              if (r.ok) {
+                document.cookie = 'wedding_auth=' + password + '; path=/; max-age=86400';
+                window.location.reload();
+              } else {
+                document.getElementById('error').style.display = 'block';
+              }
+            });
+          return false;
+        }
+      </script>
+    </body>
+    </html>
+  `);
+}
+
 // Middleware
 app.use(express.json());
+app.use(requireAuth);
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
