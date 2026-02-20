@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const cloudinary = require('cloudinary');
+const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
@@ -21,7 +21,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'madi-jake-wedding',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    allowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
     transformation: [{ width: 1200, height: 1200, crop: 'limit' }]
   }
 });
