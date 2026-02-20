@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
