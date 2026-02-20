@@ -218,13 +218,22 @@ app.post('/api/photos', upload.single('photo'), (req, res) => {
   res.json(newPhoto);
 });
 
-// Delete photo
+// Delete photo - requires uploader name verification
 app.delete('/api/photos/:id', (req, res) => {
+  const { uploaderName } = req.body;
   const photos = initDB(PHOTOS_DB);
   const photo = photos.find(p => p.id === req.params.id);
   
   if (!photo) {
     return res.status(404).json({ error: 'Photo not found' });
+  }
+  
+  // Verify the person deleting is the uploader (case-insensitive)
+  const providedName = (uploaderName || '').trim().toLowerCase();
+  const storedName = (photo.uploaderName || 'Anonymous').trim().toLowerCase();
+  
+  if (providedName !== storedName) {
+    return res.status(403).json({ error: 'Only the uploader can delete this photo' });
   }
   
   // Delete file
