@@ -7,25 +7,39 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Cookie parser middleware
+app.use((req, res, next) => {
+  req.cookies = {};
+  const cookieHeader = req.headers.cookie;
+  if (cookieHeader) {
+    cookieHeader.split(';').forEach(cookie => {
+      const [name, value] = cookie.trim().split('=');
+      req.cookies[name] = decodeURIComponent(value);
+    });
+  }
+  next();
+});
+
 // Password protection
 const WEDDING_PASSWORD = process.env.WEDDING_PASSWORD || 'MadiJake2026';
 
 function requireAuth(req, res, next) {
   const auth = req.headers.authorization || req.query.password || req.cookies?.wedding_auth;
   
+  // Check query param or cookie first (simplest)
+  if (auth && auth === WEDDING_PASSWORD) {
+    return next();
+  }
+  
   // Check basic auth header
   if (auth && auth.startsWith('Basic ')) {
     const base64 = auth.split(' ')[1];
     const decoded = Buffer.from(base64, 'base64').toString('utf8');
-    const [user, pass] = decoded.split(':');
+    const parts = decoded.split(':');
+    const pass = parts.length > 1 ? parts[1] : decoded;
     if (pass === WEDDING_PASSWORD) {
       return next();
     }
-  }
-  
-  // Check query param or cookie
-  if (auth === WEDDING_PASSWORD) {
-    return next();
   }
   
   // Return 401 with HTML login form
