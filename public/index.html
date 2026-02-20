@@ -592,11 +592,12 @@
                 }
                 
                 gallery.innerHTML = photos.map(photo => `
-                    <div class="photo-card">
-                        <img src="/uploads/${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename}')">
+                    <div class="photo-card" id="photo-${photo.id}">
+                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename}')">
                         <div class="photo-info">
                             ${photo.caption ? `<p class="photo-caption">"${photo.caption}"</p>` : ''}
                             <p class="photo-meta">📷 ${photo.uploaderName} • ${formatDate(photo.date)}</p>
+                            <button class="delete-btn" onclick="deletePhoto('${photo.id}', '${photo.uploaderName.replace(/'/g, "\\'")}')" style="background: #d32f2f; color: white; border: none; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; margin-top: 10px; cursor: pointer;">🗑️ Delete Photo</button>
                         </div>
                         <div class="comments-section">
                             <div id="comments-${photo.id}">
@@ -657,6 +658,37 @@
                 loadComments(photoId);
             } catch (err) {
                 alert('Failed to add comment');
+            }
+        }
+        
+        // Delete photo - requires uploader verification
+        async function deletePhoto(photoId, uploaderName) {
+            const confirmDelete = confirm('Are you sure you want to delete this photo?');
+            if (!confirmDelete) return;
+            
+            const enteredName = prompt('Enter your name (must match uploader):');
+            if (!enteredName) return;
+            
+            try {
+                const response = await fetch(`/api/photos/${photoId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uploaderName: enteredName })
+                });
+                
+                if (response.ok) {
+                    alert('Photo deleted successfully!');
+                    // Remove the photo card from the DOM
+                    const photoCard = document.getElementById(`photo-${photoId}`);
+                    if (photoCard) {
+                        photoCard.remove();
+                    }
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to delete photo. Make sure you entered the correct name.');
+                }
+            } catch (err) {
+                alert('Error deleting photo');
             }
         }
         
