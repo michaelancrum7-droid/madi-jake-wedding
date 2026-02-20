@@ -582,22 +582,31 @@
         // Load photos
         async function loadPhotos() {
             try {
-                const response = await fetch('/api/photos');
+                const response = await fetch('/api/photos', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const photos = await response.json();
                 const gallery = document.getElementById('gallery');
                 
-                if (photos.length === 0) {
+                if (!photos || photos.length === 0) {
                     gallery.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">No photos from The Homestead yet. Be the first to share your memories!</p>';
                     return;
                 }
                 
                 gallery.innerHTML = photos.map(photo => `
                     <div class="photo-card" id="photo-${photo.id}">
-                        <img src="/uploads/${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename}')">
+                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename.replace(/'/g, "\\'")}')" style="cursor: pointer;">
                         <div class="photo-info">
                             ${photo.caption ? `<p class="photo-caption">"${photo.caption}"</p>` : ''}
                             <p class="photo-meta">📷 ${photo.uploaderName} • ${formatDate(photo.date)}</p>
-                            <button class="delete-btn" onclick="deletePhoto('${photo.id}', '${photo.uploaderName}')" style="background: #d32f2f; color: white; border: none; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; margin-top: 10px; cursor: pointer;">🗑️ Delete Photo</button>
                         </div>
                         <div class="comments-section">
                             <div id="comments-${photo.id}">
@@ -614,7 +623,8 @@
                 // Load comments for each photo
                 photos.forEach(photo => loadComments(photo.id));
             } catch (err) {
-                document.getElementById('gallery').innerHTML = '<p style="color: red; text-align: center;">Error loading photos</p>';
+                console.error('Error loading photos:', err);
+                document.getElementById('gallery').innerHTML = '<p style="color: red; text-align: center;">Error loading photos: ' + err.message + '</p>';
             }
         }
         
@@ -833,8 +843,8 @@
         }
         
         function openLightbox(filename) {
-            // Simple lightbox could be added here
-            window.open(`/uploads/${filename}`, '_blank');
+            // Open the full Cloudinary URL in a new tab
+            window.open(filename, '_blank');
         }
         
         // Drag and drop

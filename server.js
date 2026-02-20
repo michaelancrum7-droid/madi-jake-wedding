@@ -8,12 +8,14 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS middleware for Safari compatibility
+// CORS middleware for Safari compatibility - MUST be before auth
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin || '*';
+  res.header('Access-Control-Allow-Origin', origin);
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Vary', 'Origin');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
@@ -391,4 +393,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🎉 Wedding website running at http://localhost:${PORT}`);
 });
-
