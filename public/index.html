@@ -593,11 +593,10 @@
                 
                 gallery.innerHTML = photos.map(photo => `
                     <div class="photo-card" id="photo-${photo.id}">
-                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename}')">
+                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename.replace(/'/g, "\\'")}')" style="cursor: pointer;">
                         <div class="photo-info">
                             ${photo.caption ? `<p class="photo-caption">"${photo.caption}"</p>` : ''}
                             <p class="photo-meta">📷 ${photo.uploaderName} • ${formatDate(photo.date)}</p>
-                            <button class="delete-btn" onclick="deletePhoto('${photo.id}', '${photo.uploaderName.replace(/'/g, "\\'")}')" style="background: #d32f2f; color: white; border: none; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; margin-top: 10px; cursor: pointer;">🗑️ Delete Photo</button>
                         </div>
                         <div class="comments-section">
                             <div id="comments-${photo.id}">
@@ -833,8 +832,8 @@
         }
         
         function openLightbox(filename) {
-            // Simple lightbox could be added here
-            window.open(`/uploads/${filename}`, '_blank');
+            // Open the full Cloudinary URL in a new tab
+            window.open(filename, '_blank');
         }
         
         // Drag and drop
