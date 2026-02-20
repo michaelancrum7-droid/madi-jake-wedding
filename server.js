@@ -233,10 +233,15 @@ app.post('/api/photos', upload.single('photo'), async (req, res) => {
   const { caption, uploaderName } = req.body;
   
   try {
+    // Build full Cloudinary URL
+    const cloudName = 'dlxmqdzy4';
+    const publicId = req.file.filename;
+    const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+    
     const newPhoto = new Photo({
       id: uuidv4(),
-      filename: req.file.path, // Cloudinary URL
-      cloudinaryId: req.file.filename, // Cloudinary public_id for deletion
+      filename: cloudinaryUrl, // Full Cloudinary URL
+      cloudinaryId: publicId, // Cloudinary public_id for deletion
       originalName: req.file.originalname,
       caption: caption || '',
       uploaderName: uploaderName || 'Anonymous',
