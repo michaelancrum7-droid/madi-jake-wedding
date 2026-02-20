@@ -1,13 +1,58 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// MongoDB Connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://wedding:zqTZcdTWrkUS80Ku@madi-jake-wedding.xlh7ees.mongodb.net/?appName=madi-jake-wedding';
+
+mongoose.connect(MONGODB_URI, {
+  dbName: 'madi-jake-wedding'
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
+});
+
+// Photo Schema
+const photoSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  filename: { type: String, required: true },
+  cloudinaryId: { type: String, required: true },
+  originalName: String,
+  caption: String,
+  uploaderName: { type: String, default: 'Anonymous' },
+  date: { type: Date, default: Date.now }
+});
+
+const Photo = mongoose.model('Photo', photoSchema);
+
+// Comment Schema
+const commentSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  photoId: { type: String, required: true },
+  text: { type: String, required: true },
+  authorName: { type: String, default: 'Anonymous' },
+  date: { type: Date, default: Date.now }
+});
+
+const Comment = mongoose.model('Comment', commentSchema);
+
+// Update Schema
+const updateSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  category: { type: String, default: 'general' },
+  date: { type: Date, default: Date.now }
+});
+
+const Update = mongoose.model('Update', updateSchema);
 
 // Cloudinary configuration
 cloudinary.config({
@@ -161,23 +206,6 @@ app.use(requireAuth);
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
-// Ensure data directory exists
-const DATA_DIR = './data';
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-
-// Database files
-const PHOTOS_DB = path.join(DATA_DIR, 'photos.json');
-const COMMENTS_DB = path.join(DATA_DIR, 'comments.json');
-const UPDATES_DB = path.join(DATA_DIR, 'updates.json');
-
-// Initialize databases
-function initDB(file, defaultData = []) {
-  if (!fs.existsSync(file)) {
-    fs.writeFileSync(file, JSON.stringify(defaultData, null, 2));
-  }
-  return JSON.parse(fs.readFileSync(file, 'utf8'));
-}
-
 // Multer upload config (uses Cloudinary storage)
 const upload = multer({ 
   storage,
@@ -187,133 +215,154 @@ const upload = multer({
 // Routes
 
 // Get all photos
-app.get('/api/photos', (req, res) => {
-  const photos = initDB(PHOTOS_DB);
-  res.json(photos.sort((a, b) => new Date(b.date) - new Date(a.date)));
+app.get('/api/photos', async (req, res) => {
+  try {
+    const photos = await Photo.find().sort({ date: -1 });
+    res.json(photos);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load photos' });
+  }
 });
 
 // Upload photo
-app.post('/api/photos', upload.single('photo'), (req, res) => {
+app.post('/api/photos', upload.single('photo'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
 
   const { caption, uploaderName } = req.body;
-  const photos = initDB(PHOTOS_DB);
   
-  const newPhoto = {
-    id: uuidv4(),
-    filename: req.file.path, // Cloudinary URL
-    cloudinaryId: req.file.filename, // Cloudinary public_id for deletion
-    originalName: req.file.originalname,
-    caption: caption || '',
-    uploaderName: uploaderName || 'Anonymous',
-    date: new Date().toISOString()
-  };
-  
-  photos.push(newPhoto);
-  fs.writeFileSync(PHOTOS_DB, JSON.stringify(photos, null, 2));
-  
-  res.json(newPhoto);
+  try {
+    const newPhoto = new Photo({
+      id: uuidv4(),
+      filename: req.file.path, // Cloudinary URL
+      cloudinaryId: req.file.filename, // Cloudinary public_id for deletion
+      originalName: req.file.originalname,
+      caption: caption || '',
+      uploaderName: uploaderName || 'Anonymous',
+      date: new Date()
+    });
+    
+    await newPhoto.save();
+    res.json(newPhoto);
+  } catch (err) {
+    console.error('Error saving photo:', err);
+    res.status(500).json({ error: 'Failed to save photo' });
+  }
 });
 
 // Delete photo - requires uploader name verification
 app.delete('/api/photos/:id', async (req, res) => {
   const { uploaderName } = req.body;
-  const photos = initDB(PHOTOS_DB);
-  const photo = photos.find(p => p.id === req.params.id);
   
-  if (!photo) {
-    return res.status(404).json({ error: 'Photo not found' });
-  }
-  
-  // Verify the person deleting is the uploader (case-insensitive)
-  const providedName = (uploaderName || '').trim().toLowerCase();
-  const storedName = (photo.uploaderName || 'Anonymous').trim().toLowerCase();
-  
-  if (providedName !== storedName) {
-    return res.status(403).json({ error: 'Only the uploader can delete this photo' });
-  }
-  
-  // Delete from Cloudinary if cloudinaryId exists
-  if (photo.cloudinaryId) {
-    try {
-      await cloudinary.uploader.destroy(photo.cloudinaryId);
-    } catch (err) {
-      console.error('Cloudinary delete error:', err);
+  try {
+    const photo = await Photo.findOne({ id: req.params.id });
+    
+    if (!photo) {
+      return res.status(404).json({ error: 'Photo not found' });
     }
+    
+    // Verify the person deleting is the uploader (case-insensitive)
+    const providedName = (uploaderName || '').trim().toLowerCase();
+    const storedName = (photo.uploaderName || 'Anonymous').trim().toLowerCase();
+    
+    if (providedName !== storedName) {
+      return res.status(403).json({ error: 'Only the uploader can delete this photo' });
+    }
+    
+    // Delete from Cloudinary if cloudinaryId exists
+    if (photo.cloudinaryId) {
+      try {
+        await cloudinary.uploader.destroy(photo.cloudinaryId);
+      } catch (err) {
+        console.error('Cloudinary delete error:', err);
+      }
+    }
+    
+    // Remove from MongoDB
+    await Photo.deleteOne({ id: req.params.id });
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting photo:', err);
+    res.status(500).json({ error: 'Failed to delete photo' });
   }
-  
-  // Remove from DB
-  const updated = photos.filter(p => p.id !== req.params.id);
-  fs.writeFileSync(PHOTOS_DB, JSON.stringify(updated, null, 2));
-  
-  res.json({ success: true });
 });
 
 // Get comments for a photo
-app.get('/api/photos/:id/comments', (req, res) => {
-  const comments = initDB(COMMENTS_DB);
-  const photoComments = comments.filter(c => c.photoId === req.params.id);
-  res.json(photoComments.sort((a, b) => new Date(a.date) - new Date(b.date)));
+app.get('/api/photos/:id/comments', async (req, res) => {
+  try {
+    const comments = await Comment.find({ photoId: req.params.id }).sort({ date: 1 });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load comments' });
+  }
 });
 
 // Add comment
-app.post('/api/photos/:id/comments', (req, res) => {
+app.post('/api/photos/:id/comments', async (req, res) => {
   const { text, authorName } = req.body;
   if (!text || !text.trim()) {
     return res.status(400).json({ error: 'Comment text required' });
   }
   
-  const comments = initDB(COMMENTS_DB);
-  const newComment = {
-    id: uuidv4(),
-    photoId: req.params.id,
-    text: text.trim(),
-    authorName: authorName || 'Anonymous',
-    date: new Date().toISOString()
-  };
-  
-  comments.push(newComment);
-  fs.writeFileSync(COMMENTS_DB, JSON.stringify(comments, null, 2));
-  
-  res.json(newComment);
+  try {
+    const newComment = new Comment({
+      id: uuidv4(),
+      photoId: req.params.id,
+      text: text.trim(),
+      authorName: authorName || 'Anonymous',
+      date: new Date()
+    });
+    
+    await newComment.save();
+    res.json(newComment);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add comment' });
+  }
 });
 
 // Get all updates
-app.get('/api/updates', (req, res) => {
-  const updates = initDB(UPDATES_DB);
-  res.json(updates.sort((a, b) => new Date(b.date) - new Date(a.date)));
+app.get('/api/updates', async (req, res) => {
+  try {
+    const updates = await Update.find().sort({ date: -1 });
+    res.json(updates);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to load updates' });
+  }
 });
 
 // Add update
-app.post('/api/updates', (req, res) => {
+app.post('/api/updates', async (req, res) => {
   const { title, content, category } = req.body;
   if (!title || !content) {
     return res.status(400).json({ error: 'Title and content required' });
   }
   
-  const updates = initDB(UPDATES_DB);
-  const newUpdate = {
-    id: uuidv4(),
-    title: title.trim(),
-    content: content.trim(),
-    category: category || 'general',
-    date: new Date().toISOString()
-  };
-  
-  updates.push(newUpdate);
-  fs.writeFileSync(UPDATES_DB, JSON.stringify(updates, null, 2));
-  
-  res.json(newUpdate);
+  try {
+    const newUpdate = new Update({
+      id: uuidv4(),
+      title: title.trim(),
+      content: content.trim(),
+      category: category || 'general',
+      date: new Date()
+    });
+    
+    await newUpdate.save();
+    res.json(newUpdate);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add update' });
+  }
 });
 
 // Delete update
-app.delete('/api/updates/:id', (req, res) => {
-  const updates = initDB(UPDATES_DB);
-  const updated = updates.filter(u => u.id !== req.params.id);
-  fs.writeFileSync(UPDATES_DB, JSON.stringify(updated, null, 2));
-  res.json({ success: true });
+app.delete('/api/updates/:id', async (req, res) => {
+  try {
+    await Update.deleteOne({ id: req.params.id });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete update' });
+  }
 });
 
 // Error handling
