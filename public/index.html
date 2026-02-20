@@ -354,11 +354,6 @@
         <header>
             <h1>💕 Madi & Jake 💕</h1>
             <p>Join us in celebrating our love story</p>
-            <div class="venue-info">
-                <h3>🏔️ The Homestead</h3>
-                <p>Hot Springs, Virginia</p>
-                <p style="font-size: 0.9rem; margin-top: 8px; color: #666;">Share your photos and memories from our special day!</p>
-            </div>
         </header>
         
         <div class="nav-tabs">
@@ -582,11 +577,21 @@
         // Load photos
         async function loadPhotos() {
             try {
-                const response = await fetch('/api/photos');
+                const response = await fetch('/api/photos', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const photos = await response.json();
                 const gallery = document.getElementById('gallery');
                 
-                if (photos.length === 0) {
+                if (!photos || photos.length === 0) {
                     gallery.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">No photos from The Homestead yet. Be the first to share your memories!</p>';
                     return;
                 }
@@ -613,7 +618,8 @@
                 // Load comments for each photo
                 photos.forEach(photo => loadComments(photo.id));
             } catch (err) {
-                document.getElementById('gallery').innerHTML = '<p style="color: red; text-align: center;">Error loading photos</p>';
+                console.error('Error loading photos:', err);
+                document.getElementById('gallery').innerHTML = '<p style="color: red; text-align: center;">Error loading photos: ' + err.message + '</p>';
             }
         }
         
@@ -889,6 +895,3 @@
     </script>
 </body>
 </html>
-<!-- Updated -->
-<!-- Safari fix -->
-

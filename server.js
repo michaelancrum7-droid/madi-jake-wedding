@@ -106,6 +106,18 @@ function requireAuth(req, res, next) {
   
   // Check query param or cookie first (simplest)
   if (auth && auth === WEDDING_PASSWORD) {
+    // Set Safari-compatible cookie if auth via query param
+    if (req.query.password === WEDDING_PASSWORD) {
+      const isSecure = req.headers['x-forwarded-proto'] === 'https' || req.secure;
+      const cookieOptions = [
+        'wedding_auth=' + encodeURIComponent(WEDDING_PASSWORD),
+        'Path=/',
+        'Max-Age=86400',
+        'SameSite=None',
+        isSecure ? 'Secure' : ''
+      ].filter(Boolean).join('; ');
+      res.setHeader('Set-Cookie', cookieOptions);
+    }
     return next();
   }
   
@@ -197,11 +209,12 @@ function requireAuth(req, res, next) {
         function login(e) {
           e.preventDefault();
           const password = document.getElementById('password').value;
-          fetch('/?password=' + encodeURIComponent(password))
+          fetch('/?password=' + encodeURIComponent(password), {
+            credentials: 'include'
+          })
             .then(r => {
               if (r.ok) {
-                document.cookie = 'wedding_auth=' + password + '; path=/; max-age=86400';
-                window.location.reload();
+                window.location.href = '/?password=' + encodeURIComponent(password);
               } else {
                 document.getElementById('error').style.display = 'block';
               }
