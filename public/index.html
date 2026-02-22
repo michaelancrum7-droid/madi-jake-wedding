@@ -3,893 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madi & Jake - Wedding at The Homestead</title>
+    <title>Madi & Jake — The Homestead</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#2d5a4a">
+    <meta name="theme-color" content="#1a3a2a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Madi & Jake">
     <link rel="apple-touch-icon" href="/images/hero-bg.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --forest:    #1a3a2a;
+            --deep:      #0f2318;
+            --sage:      #2e5c3e;
+            --sage-mid:  #4a7c5e;
+            --sage-light:#7aab8a;
+            --mint:      #c8e6d0;
+            --cream:     #f9f6f0;
+            --white:     #ffffff;
+            --gold:      #c9a96e;
+            --gold-light:#e8d5a8;
+            --text-dark: #1a2418;
+            --text-mid:  #3d5245;
+            --text-muted:#7a9080;
         }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            font-family: 'Lora', serif;
-            background: linear-gradient(135deg, #1a3a2f 0%, #2d5a4a 50%, #3d7a5a 100%);
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            background: var(--cream);
+            color: var(--text-dark);
             min-height: 100vh;
-            color: #333;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            padding: 100px 20px;
-            color: white;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/hero-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 20px;
-            margin-bottom: 30px;
-        }
-        
-        header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
-        }
-        
-        header p {
-            font-size: 1.4rem;
-            opacity: 0.95;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-        }
-        
-        .venue-info {
-            background: rgba(255,255,255,0.92);
-            color: #1a3a2f;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 30px auto 10px;
-            max-width: 500px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            backdrop-filter: blur(5px);
-        }
-        
-        .venue-info h3 {
-            font-family: 'Playfair Display', serif;
-            color: #2d5a4a;
-            margin-bottom: 8px;
-        }
-        
-        header p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-        }
-        
-        .nav-tabs {
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(160deg, var(--deep) 0%, var(--forest) 40%, var(--sage) 100%);
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-tab {
-            padding: 12px 30px;
-            background: rgba(255,255,255,0.9);
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        
-        .nav-tab:hover, .nav-tab.active {
-            background: #2d5a4a;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .section {
-            display: none;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        
-        .section.active {
-            display: block;
-        }
-        
-        .upload-area {
-            border: 3px dashed #ccc;
-            border-radius: 15px;
-            padding: 40px;
             text-align: center;
-            margin-bottom: 30px;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover, .upload-area.dragover {
-            border-color: #2d5a4a;
-            background: #f0f7f4;
-        }
-        
-        .upload-area input[type="file"] {
-            display: none;
-        }
-        
-        .upload-btn {
-            background: #2d5a4a;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 15px;
-        }
-        
-        .upload-btn:hover {
-            background: #1a3a2f;
-        }
-        
-        .camera-btn {
-            background: #2d5a4a;
-            color: white;
-            padding: 15px 40px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(45,90,74,0.3);
-            transition: all 0.3s;
-        }
-        
-        .camera-btn:hover {
-            background: #1a3a2f;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45,90,74,0.4);
-        }
-        
-        .install-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2d5a4a;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
-        }
-        
-        .install-btn:hover {
-            background: #1a3a2f;
-        }
-        
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
-        .photo-card {
-            background: #f8f9fa;
-            border-radius: 15px;
             overflow: hidden;
-            transition: transform 0.3s;
+            padding: 60px 20px 80px;
         }
-        
-        .photo-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('/images/hero-bg.jpg') center/cover no-repeat;
+            opacity: 0.18;
         }
-        
-        .photo-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+        .hero-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: slowSpin 60s linear infinite;
         }
-        
-        .photo-info {
-            padding: 15px;
+        .hero-ring:nth-child(1) { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .hero-ring:nth-child(2) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 90s; }
+        .hero-ring:nth-child(3) { width: 1100px; height: 1100px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        @keyframes slowSpin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+        .hero-badge {
+            position: relative;
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 1s 0.2s forwards;
         }
-        
-        .photo-caption {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 8px;
+        .hero-badge::before, .hero-badge::after { content: '—'; margin: 0 12px; opacity: 0.5; }
+        .hero-names {
+            position: relative;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 300;
+            color: var(--white);
+            line-height: 0.9;
+            letter-spacing: -0.01em;
+            opacity: 0;
+            animation: fadeUp 1s 0.4s forwards;
+            margin-bottom: 12px;
         }
-        
-        .photo-meta {
+        .hero-ampersand { font-style: italic; color: var(--gold-light); font-size: 0.85em; }
+        .hero-date {
+            position: relative;
+            font-weight: 300;
             font-size: 0.85rem;
-            color: #999;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin-top: 24px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
         }
-        
-        .comments-section {
-            padding: 15px;
-            border-top: 1px solid #eee;
-            background: #fafafa;
+        .hero-venue-card {
+            position: relative;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 2px;
+            padding: 28px 48px;
+            opacity: 0;
+            animation: fadeUp 1s 0.8s forwards;
         }
-        
-        .comment {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .comment-author {
-            font-weight: bold;
-            color: #2d5a4a;
-            font-size: 0.8rem;
-        }
-        
-        .comment-form {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .comment-form input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-        }
-        
-        .comment-form button {
-            background: #2d5a4a;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        
-        .comment-form button:hover {
-            background: #1a3a2f;
-        }
-        
-        .update-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2d5a4a;
-        }
-        
-        .update-card h3 {
-            color: #2d5a4a;
-            margin-bottom: 10px;
-        }
-        
-        .update-category {
-            display: inline-block;
-            background: #2d5a4a;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            margin-bottom: 10px;
-        }
-        
-        .update-date {
-            color: #999;
-            font-size: 0.85rem;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-        
-        .btn-primary {
-            background: #2d5a4a;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .btn-primary:hover {
-            background: #1a3a2f;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-        
+        .hero-venue-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--white); margin-bottom: 4px; }
+        .hero-venue-card p { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+        .hero-venue-card .venue-tagline { font-size: 0.82rem; letter-spacing: 0.05em; text-transform: none; color: rgba(255,255,255,0.45); font-style: italic; margin-top: 10px; font-family: 'Cormorant Garamond', serif; }
+        .hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 1s 1.2s forwards; }
+        .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+        .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+        @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-wrapper { position: sticky; top: 0; z-index: 100; background: var(--forest); border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .nav-tabs { display: flex; justify-content: center; gap: 0; max-width: 900px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .nav-tab { padding: 18px 28px; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); transition: all 0.3s; white-space: nowrap; }
+        .nav-tab:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+        .nav-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+        .main { max-width: 1100px; margin: 0 auto; padding: 60px 24px 100px; }
+        .section { display: none; animation: sectionFade 0.4s ease; }
+        .section.active { display: block; }
+        @keyframes sectionFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-eyebrow { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--sage-mid); margin-bottom: 14px; display: block; }
+        .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 300; color: var(--forest); line-height: 1.1; margin-bottom: 16px; }
+        .section-title em { font-style: italic; color: var(--sage-mid); }
+        .section-sub { font-size: 0.9rem; color: var(--text-muted); max-width: 440px; margin: 0 auto; line-height: 1.8; }
+        .section-rule { width: 48px; height: 1px; background: var(--gold); margin: 20px auto 0; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2px; }
+        .photo-card { position: relative; background: var(--forest); overflow: hidden; cursor: pointer; }
+        .photo-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.6s ease, opacity 0.3s; opacity: 0.92; }
+        .photo-card:hover img { transform: scale(1.04); opacity: 1; }
+        .photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(15,35,24,0.85)); padding: 24px 18px 18px; transform: translateY(100%); transition: transform 0.35s ease; }
+        .photo-card:hover .photo-overlay { transform: translateY(0); }
+        .photo-caption { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+        .photo-meta { font-size: 0.7rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+        .photo-comments { background: #fff; padding: 16px; }
+        .comment { padding: 8px 0; border-bottom: 1px solid #f0ede8; font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; }
+        .comment:last-of-type { border-bottom: none; }
+        .comment-author { font-weight: 500; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sage); margin-bottom: 2px; }
+        .comment-form { display: flex; gap: 8px; margin-top: 12px; }
+        .comment-form input { flex: 1; padding: 9px 14px; border: 1px solid #e0dbd2; border-radius: 2px; font-family: 'Jost', sans-serif; font-size: 0.82rem; background: var(--cream); color: var(--text-dark); outline: none; transition: border-color 0.2s; }
+        .comment-form input:focus { border-color: var(--sage-mid); }
+        .comment-form button { background: var(--forest); color: rgba(255,255,255,0.85); border: none; padding: 9px 18px; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: background 0.2s; }
+        .comment-form button:hover { background: var(--sage); }
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: var(--text-muted); }
+        .empty-state .empty-icon { font-size: 3rem; opacity: 0.3; margin-bottom: 16px; }
+        .empty-state p { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; }
+        .venue-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-bottom: 70px; }
+        .venue-intro-text h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--forest); margin-bottom: 20px; }
+        .venue-intro-text p { font-size: 0.92rem; line-height: 1.9; color: var(--text-mid); margin-bottom: 14px; }
+        .venue-details-list { list-style: none; margin-top: 24px; }
+        .venue-details-list li { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #ede9e0; font-size: 0.88rem; color: var(--text-mid); }
+        .venue-details-list li:last-child { border-bottom: none; }
+        .venue-detail-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage-mid); min-width: 90px; padding-top: 2px; }
+        .venue-detail-value a { color: var(--sage); text-decoration: none; }
+        .venue-detail-value a:hover { text-decoration: underline; }
+        .venue-intro-image { position: relative; }
+        .venue-intro-image img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+        .venue-intro-image::before { content: ''; position: absolute; inset: -10px -10px 10px 10px; border: 1px solid var(--sage-light); opacity: 0.3; z-index: -1; }
+        .venue-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+        .venue-gallery-item { overflow: hidden; cursor: pointer; }
+        .venue-gallery-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .venue-gallery-item:hover img { transform: scale(1.05); }
+        .updates-grid { display: grid; gap: 2px; }
+        .update-card { background: var(--white); padding: 32px 36px; border-left: 3px solid var(--sage); transition: border-color 0.2s; }
+        .update-card:hover { border-left-color: var(--gold); }
+        .update-tag { display: inline-block; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--white); background: var(--sage); padding: 4px 12px; margin-bottom: 14px; border-radius: 1px; }
+        .update-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--forest); margin-bottom: 10px; }
+        .update-card p { font-size: 0.9rem; line-height: 1.8; color: var(--text-mid); margin-bottom: 14px; }
+        .update-date { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+        .upload-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+        .upload-option { background: var(--white); border: 1px solid #e8e3da; padding: 40px 32px; text-align: center; transition: border-color 0.3s, box-shadow 0.3s; }
+        .upload-option:hover { border-color: var(--sage-mid); box-shadow: 0 8px 30px rgba(46,92,62,0.08); }
+        .upload-option .option-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+        .upload-option h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--forest); margin-bottom: 8px; }
+        .upload-option p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+        .upload-option input[type="file"] { display: none; }
+        .btn-primary { display: inline-block; background: var(--forest); color: rgba(255,255,255,0.9); border: none; padding: 13px 32px; font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; border-radius: 1px; transition: background 0.25s, transform 0.2s; }
+        .btn-primary:hover { background: var(--sage); transform: translateY(-1px); }
+        .btn-gold { background: var(--gold); color: var(--deep); }
+        .btn-gold:hover { background: #b89055; }
+        .dropzone { border: 1.5px dashed #cfc8bc; padding: 40px 24px; text-align: center; transition: all 0.3s; margin-bottom: 24px; }
+        .dropzone.dragover { border-color: var(--sage-mid); background: rgba(74,124,94,0.04); }
+        .upload-form-section { background: var(--white); border: 1px solid #e8e3da; padding: 36px; }
+        .upload-form-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: var(--forest); margin-bottom: 24px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 16px; border: 1px solid #e0dbd2; background: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.9rem; color: var(--text-dark); outline: none; transition: border-color 0.2s; border-radius: 1px; appearance: none; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--sage-mid); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        #uploadPreview img, #cameraPreview img { width: 100%; max-height: 260px; object-fit: cover; display: block; margin-bottom: 20px; }
+        .add-update-form { max-width: 640px; margin: 0 auto; background: var(--white); border: 1px solid #e8e3da; padding: 48px; }
+        .loading { text-align: center; padding: 60px 20px; color: var(--text-muted); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.1rem; }
+        .footer { text-align: center; padding: 48px 20px; background: var(--forest); color: rgba(255,255,255,0.35); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; }
+        .footer-names { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; font-style: italic; color: rgba(255,255,255,0.6); text-transform: none; letter-spacing: 0; display: block; margin-bottom: 8px; }
+        #installBtn { position: fixed; bottom: 24px; right: 24px; background: var(--forest); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.15); padding: 13px 22px; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; border-radius: 1px; z-index: 1000; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.2); transition: all 0.3s; }
+        #installBtn:hover { background: var(--sage); }
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(10,25,15,0.95); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+        .lightbox-close { position: absolute; top: 24px; right: 28px; color: rgba(255,255,255,0.6); font-size: 1.8rem; cursor: pointer; background: none; border: none; line-height: 1; transition: color 0.2s; }
+        .lightbox-close:hover { color: white; }
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
+            .venue-intro { grid-template-columns: 1fr; gap: 36px; }
+            .venue-intro-image { order: -1; }
+            .venue-intro-image img { aspect-ratio: 16/9; }
+            .venue-gallery { grid-template-columns: repeat(2, 1fr); }
+            .upload-layout { grid-template-columns: 1fr; }
+            .add-update-form { padding: 28px 24px; }
+            .nav-tab { padding: 16px 18px; font-size: 0.65rem; }
+            .gallery { grid-template-columns: 1fr 1fr; gap: 2px; }
+        }
+        @media (max-width: 480px) {
+            .gallery { grid-template-columns: 1fr; }
+            .venue-gallery { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>💕 Madi & Jake 💕</h1>
-            <p>Join us in celebrating our love story</p>
-        </header>
-        
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('photos')">📸 Photo Gallery</button>
-            <button class="nav-tab" onclick="showSection('venue')">🏔️ The Venue</button>
-            <button class="nav-tab" onclick="showSection('updates')">📢 Updates</button>
-            <button class="nav-tab" onclick="showSection('upload')">⬆️ Upload Photo</button>
-            <button class="nav-tab" onclick="showSection('add-update')">📝 Add Update</button>
+    <div class="hero">
+        <div class="hero-ring"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-badge">A Wedding Celebration</div>
+        <h1 class="hero-names">Madi<br><span class="hero-ampersand">&amp;</span><br>Jake</h1>
+        <p class="hero-date">Hot Springs, Virginia</p>
+        <div class="hero-venue-card">
+            <h3>The Homestead</h3>
+            <p>Est. 1766 · Allegheny Mountains</p>
+            <p class="venue-tagline">Share your photos and memories from our special day</p>
         </div>
-        
-        <!-- Photo Gallery Section -->
-        <div id="photos" class="section active">
-            <h2 style="margin-bottom: 20px; text-align: center; font-family: 'Playfair Display', serif; color: #2d5a4a;">Wedding Photos at The Homestead</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">Share your favorite moments from Madi & Jake's celebration in Hot Springs, VA</p>
-            <div id="gallery" class="gallery">
-                <div class="loading">Loading photos...</div>
-            </div>
-        </div>
-        
-        <!-- Venue Section -->
-        <div id="venue" class="section">
-            <h2 style="margin-bottom: 20px; text-align: center; font-family: 'Playfair Display', serif; color: #2d5a4a;">🏔️ The Homestead Resort</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">Hot Springs, Virginia</p>
-            
-            <div class="venue-details" style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin-bottom: 30px;">
-                <h3 style="color: #2d5a4a; margin-bottom: 15px;">About The Venue</h3>
-                <p style="line-height: 1.8; margin-bottom: 15px;">
-                    Nestled in the Allegheny Mountains, The Omni Homestead Resort is a historic luxury resort 
-                    that has been welcoming guests since 1766. With its stunning mountain views, historic charm, 
-                    and world-class amenities, it's the perfect backdrop for Madi & Jake's special day.
-                </p>
-                <p style="line-height: 1.8;">
-                    <strong>📍 Address:</strong> 7696 Sam Snead Highway, Hot Springs, VA 24445<br>
-                    <strong>📞 Phone:</strong> (540) 839-1766<br>
-                    <strong>🌐 Website:</strong> <a href="https://www.omnihotels.com/hotels/homestead" target="_blank" style="color: #2d5a4a;">omnihotels.com/homestead</a>
-                </p>
-            </div>
-            
-            <h3 style="margin-bottom: 20px; color: #2d5a4a;">Resort Gallery</h3>
-            <p style="color: #666; margin-bottom: 20px; font-style: italic;">
-                📸 A glimpse of the beautiful venue where Madi & Jake will celebrate their special day
-            </p>
-            
-            <div id="venue-gallery" class="gallery">
-                <div class="photo-card">
-                    <img src="/images/homrst-resort-matthew-majeka-1170.jpg" alt="The Homestead Resort" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">The Omni Homestead Resort</p>
-                        <p class="photo-meta">Historic mountain resort</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/old-course-pavilion-reception-set-up.jpg" alt="Wedding Reception Venue" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Wedding Reception Venue</p>
-                        <p class="photo-meta">Old Course Pavilion</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/great-hall-1170x660.jpg" alt="Great Hall" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">The Great Hall</p>
-                        <p class="photo-meta">Historic interior</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/homrst-warm-pools-couple.jpg" alt="Warm Pools" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Warm Mineral Pools</p>
-                        <p class="photo-meta">Relaxation & spa</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/homrst-omni-homestead-resort-golf-cascades-1.jpg" alt="Golf Course" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Cascades Golf Course</p>
-                        <p class="photo-meta">Championship golf</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/homrst-omni-homestead-resort-golf-cascades-5.jpg" alt="Golf Course Views" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Mountain Golf Views</p>
-                        <p class="photo-meta">Stunning landscapes</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/fire-pit-serenity-garden-1170x660.jpg" alt="Serenity Garden" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Serenity Garden</p>
-                        <p class="photo-meta">Fire pit & relaxation</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/creek-hiking-1170x660.jpg" alt="Creek & Hiking" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Creek & Hiking Trails</p>
-                        <p class="photo-meta">Explore nature</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/unnamed.jpg" alt="The Homestead" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">The Homestead</p>
-                        <p class="photo-meta">Resort views</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/unnamed-1.jpg" alt="Resort Grounds" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Resort Grounds</p>
-                        <p class="photo-meta">Scenic views</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/unnamed-2.jpg" alt="Hotel Exterior" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Hotel Exterior</p>
-                        <p class="photo-meta">Historic architecture</p>
-                    </div>
-                </div>
-                <div class="photo-card">
-                    <img src="/images/unnamed-3.jpg" alt="Mountain Views" style="width: 100%; height: 200px; object-fit: cover;">
-                    <div class="photo-info">
-                        <p class="photo-caption">Mountain Views</p>
-                        <p class="photo-meta">Stunning scenery</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Updates Section -->
-        <div id="updates" class="section">
-            <h2 style="margin-bottom: 20px; text-align: center; font-family: 'Playfair Display', serif; color: #2d5a4a;">Wedding Updates</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">Important information about The Homestead and wedding details</p>
-            <div id="updates-list">
-                <div class="loading">Loading updates...</div>
-            </div>
-        </div>
-        
-        <!-- Upload Section -->
-        <div id="upload" class="section">
-            <h2 style="margin-bottom: 20px; text-align: center; font-family: 'Playfair Display', serif; color: #2d5a4a;">Share a Photo</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 20px;">Upload your photos from The Homestead in Hot Springs, VA</p>
-            
-            <!-- Camera Capture for Mobile -->
-            <div class="camera-section" style="background: #f0f7f4; padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: center;">
-                <p style="font-size: 1.1rem; margin-bottom: 15px; color: #2d5a4a;">📱 Take a Photo Now</p>
-                <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleCameraCapture(event)" style="display: none;">
-                <label for="cameraInput" class="camera-btn" style="background: #2d5a4a; color: white; padding: 15px 40px; border-radius: 30px; cursor: pointer; display: inline-block; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(45,90,74,0.3);">
-                    📸 Open Camera
-                </label>
-                <p style="font-size: 0.85rem; color: #666; margin-top: 10px;">Tap to take a photo with your phone camera</p>
-            </div>
-            
-            <div style="text-align: center; margin: 20px 0; color: #999;">— or —</div>
-            
-            <div class="upload-area" id="uploadArea">
-                <p style="font-size: 1.2rem; margin-bottom: 10px;">📁 Upload from Gallery</p>
-                <p style="color: #999;">Drag & drop or click to browse</p>
-                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
-                <label for="fileInput" class="upload-btn">Choose Photo</label>
-            </div>
-            <div id="uploadForm" style="display: none;">
-                <div class="form-group">
-                    <label>Your Name</label>
-                    <input type="text" id="uploaderName" placeholder="Enter your name">
-                </div>
-                <div class="form-group">
-                    <label>Caption (optional)</label>
-                    <input type="text" id="photoCaption" placeholder="What's happening in this photo?">
-                </div>
-                <button class="btn-primary" onclick="uploadPhoto()">Upload Photo</button>
-            </div>
-            <div id="uploadPreview" style="margin-top: 20px; text-align: center;"></div>
-        </div>
-        
-        <!-- Add Update Section -->
-        <div id="add-update" class="section">
-            <h2 style="margin-bottom: 20px; text-align: center; font-family: 'Playfair Display', serif; color: #2d5a4a;">Add Wedding Update</h2>
-            <div class="form-group">
-                <label>Category</label>
-                <select id="updateCategory">
-                    <option value="hotel">🏨 Hotel Info</option>
-                    <option value="schedule">📅 Schedule</option>
-                    <option value="transport">🚗 Transportation</option>
-                    <option value="general">📢 General</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" id="updateTitle" placeholder="e.g., Hotel Block Available">
-            </div>
-            <div class="form-group">
-                <label>Content</label>
-                <textarea id="updateContent" rows="5" placeholder="Share the details..."></textarea>
-            </div>
-            <button class="btn-primary" onclick="addUpdate()">Post Update</button>
+        <div class="hero-scroll">
+            <span>Explore</span>
+            <div class="scroll-line"></div>
         </div>
     </div>
-    
-    <!-- PWA Install Button -->
-    <button id="installBtn" class="install-btn" onclick="installApp()">
-        📲 Install App
-    </button>
-    
+
+    <nav class="nav-wrapper">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('photos', this)">Photo Gallery</button>
+            <button class="nav-tab" onclick="showSection('venue', this)">The Venue</button>
+            <button class="nav-tab" onclick="showSection('updates', this)">Updates</button>
+            <button class="nav-tab" onclick="showSection('upload', this)">Upload Photo</button>
+            <button class="nav-tab" onclick="showSection('add-update', this)">Add Update</button>
+        </div>
+    </nav>
+
+    <main class="main">
+        <div id="photos" class="section active">
+            <div class="section-header">
+                <span class="section-eyebrow">Shared Memories</span>
+                <h2 class="section-title">Wedding <em>Photos</em></h2>
+                <p class="section-sub">Share your favorite moments from Madi &amp; Jake's celebration in the mountains of Virginia.</p>
+                <div class="section-rule"></div>
+            </div>
+            <div id="gallery" class="gallery">
+                <div class="loading">Loading photos…</div>
+            </div>
+        </div>
+
+        <div id="venue" class="section">
+            <div class="section-header">
+                <span class="section-eyebrow">Hot Springs, Virginia</span>
+                <h2 class="section-title">The <em>Homestead</em></h2>
+                <p class="section-sub">A historic mountain property nestled in the Allegheny Mountains since 1766.</p>
+                <div class="section-rule"></div>
+            </div>
+            <div class="venue-intro">
+                <div class="venue-intro-text">
+                    <h3>About the Venue</h3>
+                    <p>Nestled in the Allegheny Mountains, The Homestead is a historic luxury property that has been welcoming guests since 1766. With stunning mountain views, historic charm, and world-class amenities, it's the perfect backdrop for Madi &amp; Jake's special day.</p>
+                    <p>From championship golf and warm mineral pools to the grand ballroom and manicured gardens, The Homestead offers an unmatched setting for an unforgettable celebration.</p>
+                    <ul class="venue-details-list">
+                        <li><span class="venue-detail-label">Address</span><span class="venue-detail-value">7696 Sam Snead Highway, Hot Springs, VA 24445</span></li>
+                        <li><span class="venue-detail-label">Phone</span><span class="venue-detail-value">(540) 839-1766</span></li>
+                        <li><span class="venue-detail-label">Website</span><span class="venue-detail-value"><a href="https://www.omnihotels.com/hotels/homestead" target="_blank">thehomestead.com</a></span></li>
+                    </ul>
+                </div>
+                <div class="venue-intro-image">
+                    <img src="/images/homrst-resort-matthew-majeka-1170.jpg" alt="The Homestead">
+                </div>
+            </div>
+            <div class="section-header" style="margin-bottom: 24px;">
+                <span class="section-eyebrow">Venue Gallery</span>
+                <h2 class="section-title" style="font-size: 1.8rem;">A glimpse of our <em>venue</em></h2>
+                <div class="section-rule"></div>
+            </div>
+            <div class="venue-gallery">
+                <div class="venue-gallery-item"><img src="/images/old-course-pavilion-reception-set-up.jpg" alt="Wedding Reception"></div>
+                <div class="venue-gallery-item"><img src="/images/great-hall-1170x660.jpg" alt="The Great Hall"></div>
+                <div class="venue-gallery-item"><img src="/images/homrst-warm-pools-couple.jpg" alt="Warm Mineral Pools"></div>
+                <div class="venue-gallery-item"><img src="/images/homrst-omni-homestead-resort-golf-cascades-1.jpg" alt="Golf Course"></div>
+                <div class="venue-gallery-item"><img src="/images/fire-pit-serenity-garden-1170x660.jpg" alt="Serenity Garden"></div>
+                <div class="venue-gallery-item"><img src="/images/creek-hiking-1170x660.jpg" alt="Hiking Trails"></div>
+            </div>
+        </div>
+
+        <div id="updates" class="section">
+            <div class="section-header">
+                <span class="section-eyebrow">Important Information</span>
+                <h2 class="section-title">Wedding <em>Updates</em></h2>
+                <p class="section-sub">Details about The Homestead, schedule, and everything you need to know.</p>
+                <div class="section-rule"></div>
+            </div>
+            <div id="updates-list" class="updates-grid">
+                <div class="loading">Loading updates…</div>
+            </div>
+        </div>
+
+        <div id="upload" class="section">
+            <div class="section-header">
+                <span class="section-eyebrow">Contribute to the Gallery</span>
+                <h2 class="section-title">Share a <em>Photo</em></h2>
+                <p class="section-sub">Upload your photos from The Homestead and become part of the wedding story.</p>
+                <div class="section-rule"></div>
+            </div>
+            <div class="upload-layout">
+                <div>
+                    <div class="upload-option">
+                        <span class="option-icon">📸</span>
+                        <h3>Take a Photo</h3>
+                        <p>Open your camera and capture this moment right now.</p>
+                        <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleCameraCapture(event)">
+                        <label for="cameraInput" class="btn-primary btn-gold">Open Camera</label>
+                    </div>
+                    <div style="text-align:center; padding: 20px 0; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted);">or</div>
+                    <div class="upload-option dropzone" id="uploadArea">
+                        <span class="option-icon">📁</span>
+                        <h3>From Your Gallery</h3>
+                        <p>Drag &amp; drop a photo here, or browse your files.</p>
+                        <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+                        <label for="fileInput" class="btn-primary">Browse Photos</label>
+                    </div>
+                </div>
+                <div class="upload-form-section" id="uploadFormWrapper" style="display:none;">
+                    <h3>Photo Details</h3>
+                    <div id="cameraPreview"></div>
+                    <div id="uploadPreview"></div>
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="uploaderName" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Caption (optional)</label>
+                        <input type="text" id="photoCaption" placeholder="What's happening in this photo?">
+                    </div>
+                    <button class="btn-primary" onclick="uploadPhoto()">Upload Photo</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="add-update" class="section">
+            <div class="section-header">
+                <span class="section-eyebrow">Keep Guests Informed</span>
+                <h2 class="section-title">Post an <em>Update</em></h2>
+                <div class="section-rule"></div>
+            </div>
+            <div class="add-update-form">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="updateCategory">
+                        <option value="hotel">Hotel Info</option>
+                        <option value="schedule">Schedule</option>
+                        <option value="transport">Transportation</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="updateTitle" placeholder="e.g., Hotel Block Available">
+                </div>
+                <div class="form-group">
+                    <label>Content</label>
+                    <textarea id="updateContent" placeholder="Share the details…"></textarea>
+                </div>
+                <button class="btn-primary" onclick="addUpdate()">Post Update</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <span class="footer-names">Madi &amp; Jake</span>
+        The Homestead · Hot Springs, Virginia
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <button id="installBtn" onclick="installApp()">Install App</button>
+
     <script>
         let selectedFile = null;
-        
-        // Navigation
-        function showSection(sectionId) {
+
+        function showSection(sectionId, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
-            
+            if (btn) btn.classList.add('active');
             if (sectionId === 'photos') loadPhotos();
             if (sectionId === 'updates') loadUpdates();
         }
-        
-        // Load photos
+
         async function loadPhotos() {
             try {
-                const response = await fetch('/api/photos', {
-                    credentials: 'same-origin',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                const response = await fetch('/api/photos', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const photos = await response.json();
                 const gallery = document.getElementById('gallery');
-                
                 if (!photos || photos.length === 0) {
-                    gallery.innerHTML = '<p style="text-align: center; color: #999; grid-column: 1/-1;">No photos from The Homestead yet. Be the first to share your memories!</p>';
+                    gallery.innerHTML = `<div class="empty-state"><div class="empty-icon">🌿</div><p>No photos yet — be the first to share a memory.</p></div>`;
                     return;
                 }
-                
                 gallery.innerHTML = photos.map(photo => `
                     <div class="photo-card" id="photo-${photo.id}">
-                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename.replace(/'/g, "\\'")}')" style="cursor: pointer;">
-                        <div class="photo-info">
-                            ${photo.caption ? `<p class="photo-caption">"${photo.caption}"</p>` : ''}
-                            <p class="photo-meta">📷 ${photo.uploaderName} • ${formatDate(photo.date)}</p>
+                        <img src="${photo.filename}" alt="${photo.caption || 'Wedding photo'}" onclick="openLightbox('${photo.filename.replace(/'/g, "\\'")}')">
+                        <div class="photo-overlay">
+                            ${photo.caption ? `<p class="photo-caption">${escapeHtml(photo.caption)}</p>` : ''}
+                            <p class="photo-meta">${escapeHtml(photo.uploaderName)} · ${formatDate(photo.date)}</p>
                         </div>
-                        <div class="comments-section">
-                            <div id="comments-${photo.id}">
-                                <div class="loading">Loading comments...</div>
-                            </div>
+                        <div class="photo-comments">
+                            <div id="comments-${photo.id}"><div class="loading" style="padding:12px 0;font-size:0.8rem;">Loading…</div></div>
                             <div class="comment-form">
-                                <input type="text" id="comment-input-${photo.id}" placeholder="Add a comment...">
+                                <input type="text" id="comment-input-${photo.id}" placeholder="Add a comment…">
                                 <button onclick="addComment('${photo.id}')">Post</button>
                             </div>
                         </div>
-                    </div>
-                `).join('');
-                
-                // Load comments for each photo
+                    </div>`).join('');
                 photos.forEach(photo => loadComments(photo.id));
             } catch (err) {
-                console.error('Error loading photos:', err);
-                document.getElementById('gallery').innerHTML = '<p style="color: red; text-align: center;">Error loading photos: ' + err.message + '</p>';
+                document.getElementById('gallery').innerHTML = `<div class="empty-state"><p>Could not load photos: ${err.message}</p></div>`;
             }
         }
-        
-        // Load comments
+
         async function loadComments(photoId) {
             try {
                 const response = await fetch(`/api/photos/${photoId}/comments`);
                 const comments = await response.json();
                 const container = document.getElementById(`comments-${photoId}`);
-                
                 if (comments.length === 0) {
-                    container.innerHTML = '<p style="color: #999; font-size: 0.85rem;">No comments yet</p>';
+                    container.innerHTML = '<p style="font-size:0.78rem;color:var(--text-muted);padding:4px 0;font-style:italic;">No comments yet</p>';
                 } else {
-                    container.innerHTML = comments.map(c => `
-                        <div class="comment">
-                            <span class="comment-author">${c.authorName}</span>
-                            <p>${escapeHtml(c.text)}</p>
-                        </div>
-                    `).join('');
+                    container.innerHTML = comments.map(c => `<div class="comment"><div class="comment-author">${escapeHtml(c.authorName)}</div><p>${escapeHtml(c.text)}</p></div>`).join('');
                 }
-            } catch (err) {
-                document.getElementById(`comments-${photoId}`).innerHTML = '<p style="color: #999;">Could not load comments</p>';
-            }
+            } catch { document.getElementById(`comments-${photoId}`).innerHTML = ''; }
         }
-        
-        // Add comment
+
         async function addComment(photoId) {
             const input = document.getElementById(`comment-input-${photoId}`);
             const text = input.value.trim();
             if (!text) return;
-            
             const authorName = prompt('Your name:') || 'Anonymous';
-            
             try {
-                await fetch(`/api/photos/${photoId}/comments`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text, authorName })
-                });
+                await fetch(`/api/photos/${photoId}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, authorName }) });
                 input.value = '';
                 loadComments(photoId);
-            } catch (err) {
-                alert('Failed to add comment');
-            }
+            } catch { alert('Failed to post comment.'); }
         }
-        
-        // Delete photo - requires uploader verification
-        async function deletePhoto(photoId, uploaderName) {
-            const confirmDelete = confirm('Are you sure you want to delete this photo?');
-            if (!confirmDelete) return;
-            
-            const enteredName = prompt('Enter your name (must match uploader):');
-            if (!enteredName) return;
-            
-            try {
-                const response = await fetch(`/api/photos/${photoId}`, {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uploaderName: enteredName })
-                });
-                
-                if (response.ok) {
-                    alert('Photo deleted successfully!');
-                    // Remove the photo card from the DOM
-                    const photoCard = document.getElementById(`photo-${photoId}`);
-                    if (photoCard) {
-                        photoCard.remove();
-                    }
-                } else {
-                    const error = await response.json();
-                    alert(error.error || 'Failed to delete photo. Make sure you entered the correct name.');
-                }
-            } catch (err) {
-                alert('Error deleting photo');
-            }
-        }
-        
-        // Handle camera capture
+
         function handleCameraCapture(event) {
             selectedFile = event.target.files[0];
-            if (selectedFile) {
-                document.getElementById('uploadForm').style.display = 'block';
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('uploadPreview').innerHTML = 
-                        `<div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                            <p style="color: #2d5a4a; font-weight: bold;">✓ Photo captured!</p>
-                            <img src="${e.target.result}" style="max-width: 300px; max-height: 300px; border-radius: 10px; margin-top: 10px;">
-                        </div>`;
-                    // Scroll to form
-                    document.getElementById('uploadForm').scrollIntoView({ behavior: 'smooth' });
-                };
-                reader.readAsDataURL(selectedFile);
-            }
+            if (!selectedFile) return;
+            showUploadForm(selectedFile, 'cameraPreview');
         }
-        
-        // Handle file upload
+
         function handleFileSelect(event) {
             selectedFile = event.target.files[0];
-            if (selectedFile) {
-                document.getElementById('uploadForm').style.display = 'block';
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('uploadPreview').innerHTML = 
-                        `<img src="${e.target.result}" style="max-width: 300px; max-height: 300px; border-radius: 10px;">`;
-                };
-                reader.readAsDataURL(selectedFile);
-            }
+            if (!selectedFile) return;
+            showUploadForm(selectedFile, 'uploadPreview');
         }
-        
-        // Upload photo
+
+        function showUploadForm(file, previewId) {
+            document.getElementById('uploadFormWrapper').style.display = 'block';
+            document.getElementById('uploadFormWrapper').scrollIntoView({ behavior: 'smooth' });
+            const reader = new FileReader();
+            reader.onload = e => { document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`; };
+            reader.readAsDataURL(file);
+        }
+
         async function uploadPhoto() {
             if (!selectedFile) return;
-            
             const formData = new FormData();
             formData.append('photo', selectedFile);
             formData.append('uploaderName', document.getElementById('uploaderName').value || 'Anonymous');
             formData.append('caption', document.getElementById('photoCaption').value);
-            
             try {
-                const response = await fetch('/api/photos', {
-                    method: 'POST',
-                    body: formData
-                });
-                
+                const response = await fetch('/api/photos', { method: 'POST', body: formData });
                 if (response.ok) {
-                    alert('Photo uploaded successfully!');
-                    document.getElementById('uploadForm').style.display = 'none';
+                    document.getElementById('uploadFormWrapper').style.display = 'none';
                     document.getElementById('uploadPreview').innerHTML = '';
+                    document.getElementById('cameraPreview').innerHTML = '';
                     document.getElementById('fileInput').value = '';
+                    document.getElementById('uploaderName').value = '';
+                    document.getElementById('photoCaption').value = '';
                     selectedFile = null;
-                    showSection('photos');
-                } else {
-                    alert('Upload failed');
-                }
-            } catch (err) {
-                alert('Error uploading photo');
-            }
+                    showSection('photos', document.querySelector('.nav-tab'));
+                } else { alert('Upload failed. Please try again.'); }
+            } catch { alert('Error uploading photo.'); }
         }
-        
-        // Load updates
+
         async function loadUpdates() {
             try {
                 const response = await fetch('/api/updates');
                 const updates = await response.json();
                 const container = document.getElementById('updates-list');
-                
                 if (updates.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: #999;">No updates yet</p>';
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-style:italic;padding:40px 0;">No updates posted yet.</p>';
                     return;
                 }
-                
-                const categoryIcons = {
-                    hotel: '🏨',
-                    schedule: '📅',
-                    transport: '🚗',
-                    general: '📢'
-                };
-                
-                container.innerHTML = updates.map(update => `
+                const icons = { hotel: 'Hotel', schedule: 'Schedule', transport: 'Transportation', general: 'Update' };
+                container.innerHTML = updates.map(u => `
                     <div class="update-card">
-                        <span class="update-category">${categoryIcons[update.category] || '📢'} ${update.category}</span>
-                        <h3>${escapeHtml(update.title)}</h3>
-                        <p style="margin-bottom: 10px; line-height: 1.6;">${escapeHtml(update.content).replace(/\n/g, '<br>')}</p>
-                        <p class="update-date">Posted ${formatDate(update.date)}</p>
-                    </div>
-                `).join('');
-            } catch (err) {
-                document.getElementById('updates-list').innerHTML = '<p style="color: red; text-align: center;">Error loading updates</p>';
-            }
+                        <span class="update-tag">${icons[u.category] || 'Update'}</span>
+                        <h3>${escapeHtml(u.title)}</h3>
+                        <p>${escapeHtml(u.content).replace(/\n/g, '<br>')}</p>
+                        <span class="update-date">${formatDate(u.date)}</span>
+                    </div>`).join('');
+            } catch { document.getElementById('updates-list').innerHTML = '<p style="color:red;text-align:center;">Could not load updates.</p>'; }
         }
-        
-        // Add update
+
         async function addUpdate() {
             const category = document.getElementById('updateCategory').value;
             const title = document.getElementById('updateTitle').value.trim();
             const content = document.getElementById('updateContent').value.trim();
-            
-            if (!title || !content) {
-                alert('Please fill in title and content');
-                return;
-            }
-            
+            if (!title || !content) { alert('Please fill in the title and content.'); return; }
             try {
-                await fetch('/api/updates', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category, title, content })
-                });
-                
-                alert('Update posted!');
+                await fetch('/api/updates', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ category, title, content }) });
                 document.getElementById('updateTitle').value = '';
                 document.getElementById('updateContent').value = '';
-                showSection('updates');
-            } catch (err) {
-                alert('Failed to post update');
+                showSection('updates', document.querySelectorAll('.nav-tab')[2]);
+            } catch { alert('Failed to post update.'); }
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function escapeHtml(text) {
+            const d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
+        }
+
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (!e || e.target !== document.getElementById('lightboxImg')) {
+                document.getElementById('lightbox').classList.remove('open');
+                document.body.style.overflow = '';
             }
         }
-        
-        // Helpers
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-        
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function openLightbox(filename) {
-            // Open the full Cloudinary URL in a new tab
-            window.open(filename, '_blank');
-        }
-        
-        // Drag and drop
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
         const uploadArea = document.getElementById('uploadArea');
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-        uploadArea.addEventListener('drop', (e) => {
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
             const files = e.dataTransfer.files;
-            if (files.length) {
-                document.getElementById('fileInput').files = files;
-                handleFileSelect({ target: { files } });
-            }
+            if (files.length) { document.getElementById('fileInput').files = files; handleFileSelect({ target: { files } }); }
         });
-        
-        // Initial load
+
         loadPhotos();
-        
-        // Register Service Worker for PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((reg) => console.log('Service Worker registered'))
-                .catch((err) => console.log('Service Worker registration failed'));
-        }
-        
-        // PWA Install prompt
+
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/service-worker.js').catch(() => {}); }
+
         let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
+        window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             deferredPrompt = e;
-            // Show install button
-            const installBtn = document.getElementById('installBtn');
-            if (installBtn) installBtn.style.display = 'block';
+            document.getElementById('installBtn').style.display = 'block';
         });
-        
+
         function installApp() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') {
-                        console.log('User installed the app');
-                    }
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
             }
         }
     </script>
