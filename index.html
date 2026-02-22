@@ -1,1 +1,118 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madi & Jake — The Homestead</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1a3a2a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Madi & Jake">
+    <link rel="apple-touch-icon" href="/images/hero-bg.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest:    #1a3a2a;
+            --deep:      #0f2318;
+            --sage:      #2e5c3e;
+            --sage-mid:  #4a7c5e;
+            --sage-light:#7aab8a;
+            --mint:      #c8e6d0;
+            --cream:     #f9f6f0;
+            --white:     #ffffff;
+            --gold:      #c9a96e;
+            --gold-light:#e8d5a8;
+            --text-dark: #1a2418;
+            --text-mid:  #3d5245;
+            --text-muted:#7a9080;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(160deg, var(--deep) 0%, var(--forest) 40%, var(--sage) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            padding: 60px 20px 80px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('/images/hero-bg.jpg') center/cover no-repeat;
+            opacity: 0.18;
+        }
+        .hero-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: slowSpin 60s linear infinite;
+        }
+        .hero-ring:nth-child(1) { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .hero-ring:nth-child(2) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 90s; }
+        .hero-ring:nth-child(3) { width: 1100px; height: 1100px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        @keyframes slowSpin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+        .hero-badge {
+            position: relative;
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 1s 0.2s forwards;
+        }
+        .hero-badge::before, .hero-badge::after { content: '—'; margin: 0 12px; opacity: 0.5; }
+        .hero-names {
+            position: relative;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            font-weight: 300;
+            color: var(--white);
+            line-height: 0.9;
+            opacity: 0;
+            animation: fadeUp 1s 0.4s forwards;
+            margin-bottom: 12px;
+        }
+        .hero-ampersand { font-style: italic; color: var(--gold-light); font-size: 0.85em; }
+        .hero-date {
+            position: relative;
+            font-weight: 300;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin-top: 24px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+        }
+        .hero-venue-card {
+            position: relative;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 2px;
+            padding: 28px 48px;
+            opacity: 0;
+            animation: fadeUp 1s 0.8s forwards;
+        }
+        .hero-venue-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--white); margin-bottom: 4px; }
+        .hero-venue-card p { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+        .hero-venue-card .venue-tagline { font-size: 0.82rem; letter-spacing: 0.05em; text-transform: none; color: rgba(255,255,255,0.45); font-style: italic; margin-top: 10px; font-family: 'Cormorant Garamond', serif; }
+        .hero-scroll { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeUp 1s 1.2s forwards; }
+        .hero-scroll
